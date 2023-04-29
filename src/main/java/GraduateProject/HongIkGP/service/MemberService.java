@@ -27,10 +27,10 @@ public class MemberService {
 
     /** 중복 회원 검증 **/
     private void validateDuplicateMember(Member member) {
-        List<Member> findMembers = memberRepository.findByName(member.getName());
+        List<Member> findMembers = memberRepository.findByUserId(member.getUserId());
 
         if (!findMembers.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+            throw new IllegalStateException("이미 존재하는 아이디입니다.");
         }
     }
 }
