@@ -1,8 +1,11 @@
 package GraduateProject.HongIkGP.service;
 
 import GraduateProject.HongIkGP.domain.Member;
+import GraduateProject.HongIkGP.domain.dto.SignResponse;
 import GraduateProject.HongIkGP.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,24 +16,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
+    @Autowired
     private final MemberRepository memberRepository;
 
-    /** 회원 가입 **/
-    @Transactional
-    public Long join(Member member) {
+    /** 회원 조회 **/
+    public SignResponse getMember(String email) throws Exception {
 
-        validateDuplicateMember(member);// 중복 회원 검증
-        memberRepository.save(member);
+        List<Member> member = memberRepository.findByEmail(email);
 
-        return member.getId();
-    }
-
-    /** 중복 회원 검증 **/
-    private void validateDuplicateMember(Member member) {
-        List<Member> findMembers = memberRepository.findByUserId(member.getUserId());
-
-        if (!findMembers.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 아이디입니다.");
+        if (member.isEmpty()) {
+            throw new BadCredentialsException("계정을 찾을 수 없습니다.");
         }
+
+        return new SignResponse(member.get(0));
     }
 }
