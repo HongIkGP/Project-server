@@ -1,6 +1,5 @@
 package GraduateProject.HongIkGP.controller;
 
-import GraduateProject.HongIkGP.domain.Member;
 import GraduateProject.HongIkGP.domain.dto.SignResponse;
 import GraduateProject.HongIkGP.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +20,12 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/user/get")
-    public ResponseEntity<SignResponse> getUser(@RequestParam String email) throws Exception {
-        return new ResponseEntity<>(memberService.getMember(email), HttpStatus.OK);
+    public ResponseEntity<SignResponse> getUser(@RequestBody Map<String, String> data) throws Exception {
+        return new ResponseEntity<>(memberService.getMember(data.get("email")), HttpStatus.OK);
     }
 
     @GetMapping("/admin/get")
-    public ResponseEntity<SignResponse> getUserForAdmin(@RequestParam String email) throws Exception {
-        return new ResponseEntity<>(memberService.getMember(email), HttpStatus.OK);
+    public ResponseEntity<SignResponse> getUserForAdmin(@RequestParam Map<String, String> data) throws Exception {
+        return new ResponseEntity<>(memberService.getMember(data.get("email")), HttpStatus.OK);
     }
 }
